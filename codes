@@ -1,0 +1,43 @@
+# face_recognition-python
+#we'll try to understand face_recognition library in python
+
+# first step is importing required libraries
+
+#for comparing and detetction
+import face_recognition 
+#to see on webcam
+import cv2 
+
+#load an image with face_recognition library an encode it
+hayati_yuz = face_recognition.load_image_file("media//WIN_20221030_14_08_00_Pro.jpg")
+hayati_encode = face_recognition.face_encodings(hayati_yuz)[0]
+
+
+#with open cv taking a frame from webcam
+cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+
+while True:
+    ret,frame = cap.read()
+    #to process these frame convert into rgb
+    rgb = cv2.cvtColor(small_frame,cv2.COLOR_BGR2RGB)
+    #to find locations in webcam frames use this function
+    face_lokasyonu = face_recognition.face_locations(rgb)
+    #and encoding these locations
+    face_encodes = face_recognition.face_encodings(rgb,face_lokasyonu)
+    #travel in encodes with for loop
+    for face_encode in face_encodes:
+        match = face_recognition.compare_faces([bilinen_yuz_encodesi],face_encode)
+        # if true exists in match, it will go on
+        if True in match:
+        #drawing a rectangel
+            for (yukari,sag,asagi,sol) in face_lokasyonu:
+                cv2.rectangle(frame,(sol,yukari),(sag,asagi),(0,255,0),thickness=2)
+        else:
+          pass
+    cv2.imshow("cap",frame)
+    if cv2.waitKey(1)&0xFF == ord("q"):
+        break
+cap.release()
+cv2.destroyAllWindows()
+
+
